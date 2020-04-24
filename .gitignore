@@ -1,0 +1,4 @@
+# Ignore configs, pid files and the logs directory
+*.cfg
+*.pid
+/logs/
