@@ -1,0 +1,44 @@
+#!/bin/sh
+# airflow-webserver/rc.main
+# perp runscript for Apache Airflow webserver
+# jkniiv@gmail.com, 2020-03-15/2020-05-18
+# ===
+exec 2>&1
+
+TARGET=${1}
+SVNAME=${2}
+
+## start target:
+start() {
+    HOME=/home/jkniiv
+    USER=jkniiv
+    PORT=41781  # spells "AIRFL" in an ancient Mediterranean alphabet -- kinda :)
+    VERSION=1.10.10
+
+    echo "*** ${SVNAME}: starting the Apache Airflow webserver..."
+    cd ${HOME}/py-prj/Airflow-${VERSION}
+    exec \
+      runuid ${USER} \
+        runenv ${PERP_BASE}/${SVNAME}/service.env \
+            ${HOME}/.local/bin/pipenv run airflow webserver --port ${PORT}
+}
+
+
+## reset target:
+reset() {
+    case $3 in
+      'exit' )
+          echo "*** ${SVNAME}: exited status $4" ;;
+      'signal' )
+          echo "*** ${SVNAME}: killed on signal $5" ;;
+      * )
+          echo "*** ${SVNAME}: stopped ($3)" ;;
+    esac
+    exit 0
+}
+
+
+## branch to target:
+eval ${TARGET} "$@"
+
+### EOF
