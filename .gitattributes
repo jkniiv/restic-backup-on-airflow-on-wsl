@@ -3,3 +3,7 @@
 *.md text eol=lf
 *.cfg text eol=lf
 *.vbs text eol=crlf
+*.tar.gz binary
+*.mk text eol=lf
+*.env eol=lf
+rc.* text eol=lf
