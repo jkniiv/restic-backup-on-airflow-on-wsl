@@ -22,7 +22,7 @@ args = {
 
 dag = DAG(
     dag_id='restic_check',
-    schedule_interval='50 9 * * *',
+    schedule_interval=None,
     dagrun_timeout=timedelta(minutes=60),
     catchup=False,
     default_args=args,
