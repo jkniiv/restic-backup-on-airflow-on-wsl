@@ -42,13 +42,18 @@ run_restic_backup = BashOperator(
 
 run_restic_check = BashOperator(
     task_id='run_restic_check',
-    bash_command=msys2_bash_invocation("restic-do-check"),
+    bash_command=msys2_bash_invocation(
+        "SKIP_RESTIC_CHECK_TASK='${SKIP_RESTIC_CHECK_TASK}' restic-do-check"),
+    env={'SKIP_RESTIC_CHECK_TASK': '{{ dag_run.conf["skip_check"] if dag_run else "no" }}'},
     dag=dag,
 )
 
 run_restic_forget = BashOperator(
     task_id='run_restic_forget',
-    bash_command=msys2_bash_invocation("restic-forget-according-to-my-policy"),
+    bash_command=msys2_bash_invocation(
+        "SKIP_RESTIC_FORGET_TASK='${SKIP_RESTIC_FORGET_TASK}' restic-forget-according-to-my-policy"
+    ),
+    env={'SKIP_RESTIC_FORGET_TASK': '{{ dag_run.conf["skip_forget"] if dag_run else "no" }}'},
     dag=dag,
 )
 
