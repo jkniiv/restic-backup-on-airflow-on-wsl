@@ -1,7 +1,7 @@
 #!/bin/sh
 # airflow-webserver/rc.main
 # perp runscript for Apache Airflow webserver
-# jkniiv@gmail.com, 2020-03-15/2020-05-18
+# jkniiv@gmail.com, 2020-03-15/2020-05-18/2020-12-31
 # ===
 exec 2>&1
 
@@ -13,20 +13,21 @@ start() {
     HOME=/home/jkniiv
     USER=jkniiv
     PORT=41781  # spells "AIRFL" in an ancient Mediterranean alphabet -- kinda :)
-    VERSION=1.10.10
 
     echo "*** ${SVNAME}: starting the Apache Airflow webserver..."
-    cd ${HOME}/py-prj/Airflow-${VERSION}
+    # shellcheck source=service.env
+    . "${PERP_BASE}/${SVNAME}/service.env"
+    cd "${AIRFLOW_HOME}" || exit 1
     exec \
-      runuid ${USER} \
-        runenv ${PERP_BASE}/${SVNAME}/service.env \
-            ${HOME}/.local/bin/pipenv run airflow webserver --port ${PORT}
+      runuid "${USER}" \
+        runenv "${PERP_BASE}/${SVNAME}/service.env" \
+            "${HOME}/.local/bin/pipenv" run airflow webserver --port "${PORT}"
 }
 
 
 ## reset target:
 reset() {
-    case $3 in
+    case "$3" in
       'exit' )
           echo "*** ${SVNAME}: exited status $4" ;;
       'signal' )
@@ -39,6 +40,6 @@ reset() {
 
 
 ## branch to target:
-eval ${TARGET} "$@"
+eval "${TARGET}" "$@"
 
 ### EOF
