@@ -3,3 +3,8 @@
 *.pid
 *.LOG*
 /logs/
+
+# Also ignore the following Flask stuff
+instance/
+.webassets-cache
+/webserver_config.py
