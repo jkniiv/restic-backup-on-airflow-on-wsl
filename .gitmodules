@@ -1,0 +1,3 @@
+[submodule "backup-scripts"]
+	path = backup-scripts
+	url = https://github.com/jkniiv/simple_restic_backup_scripts
